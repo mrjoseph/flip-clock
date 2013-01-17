@@ -1,26 +1,30 @@
 (function($, window, undefined){
+
+	//Create the clock object
 	var clock = clock || {};
 	clock = {
-		container : $('#container'),
-		seconds : 0,
-		minutes : 0,
-		hours : 0,
-		//Seconds
-		secondsFlip : '#seconds .flipper',
-		secondsFront : '#seconds .front',
-		secondsBack : '#seconds .back',
-		secondsElem :'#seconds',
-		//Minutes
-		minutesFlip : '#minutes .flipper',
-		minutesFront : '#minutes .front',
-		minutesBack : '#minutes .back',
-		minutesElem :'#minutes',
-		//Minutes
-		hoursFlip : '#hours .flipper',
-		hoursFront : '#hours .front',
-		hoursBack : '#hours .back',
-		hoursElem :'#hours',
+		//These valuses get updated and displayed in the clock
+		seconds		: 0,
+		minutes		: 0,
+		hours		: 0,
 
+		//Grab these elements from the Dom
+		//Seconds
+		secondsFlip		: '#seconds .flipper',
+		secondsFront	: '#seconds .front',
+		secondsBack		: '#seconds .back',
+		secondsElem		:'#seconds',
+		//Minutes
+		minutesFlip		: '#minutes .flipper',
+		minutesFront	: '#minutes .front',
+		minutesBack		: '#minutes .back',
+		minutesElem		:'#minutes',
+		//Minutes
+		hoursFlip		: '#hours .flipper',
+		hoursFront		: '#hours .front',
+		hoursBack		: '#hours .back',
+		hoursElem		:'#hours',
+		container		: $('#container'),
 		// This function centers the clock in the middle of the browser
 		browserResize: function(){
 			var winHeight = $(window).height();
@@ -28,8 +32,12 @@
 		},
 		adjustSeconds: function(){
 			setInterval(function(){
+
+				//When the seconds hits 59 reset the seconds to 0 on the next stroke
 				if(clock.seconds == 59){
 					clock.seconds = 0;
+
+					//Update the minute value
 					clock.adjustMinutes();
 				}
 				//Add 1 to the counter
@@ -42,7 +50,7 @@
 				$(clock.secondsFlip).addClass('active');
 				//Append the new counter to the back
 				$(clock.secondsFront).html(clock.seconds);
-				
+
 				$(clock.secondsFlip).fadeOut(550,function(){
 					//Jquery remove doesn't have a callback function so I've used fadeout
 					$(this).remove();
@@ -52,9 +60,12 @@
 			},1000);
 		},
 		adjustMinutes: function(){
-	
+
+			//When the minute hits 59 reset the minute to 0 on the next stroke
 			if(clock.minutes == 59){
 				clock.minutes = 0;
+
+				//Adjust the hour value
 				clock.adjustHours();
 			}
 			//Add 1 to the counter
@@ -67,7 +78,7 @@
 			$(clock.minutesFlip).addClass('active');
 			//Append the new counter to the back
 			$(clock.minutesFront).html(clock.minutes);
-			
+
 			$(clock.minutesFlip).fadeOut(550,function(){
 				//Jquery remove doesn't have a callback function so I've used fadeout
 				$(this).remove();
@@ -90,7 +101,7 @@
 			$(clock.hoursFlip).addClass('active');
 			//Append the new counter to the back
 			$(clock.hoursFront).html(clock.hours);
-			
+
 			$(clock.hoursFlip).fadeOut(550,function(){
 				//Jquery remove doesn't have a callback function so I've used fadeout
 				$(this).remove();
@@ -120,9 +131,14 @@
 			//Reset button
 			$('.resetbutton a').on('click',function(e){
 				e.preventDefault();
-				$('#seconds .front, #seconds .back').html('00');
-				$('#minutes .front, #minutes .back').html('00');
-				$('#hours .front, #hours .back').html('00');
+				clock.seconds = 0;
+				clock.minutes = 0;
+				clock.hours = 0;
+				clock.addZero();
+				$('#seconds .front, #seconds .back').html(clock.seconds);
+				$('#minutes .front, #minutes .back').html(clock.minutes);
+				$('#hours .front, #hours .back').html(clock.hours);
+
 			});
 			clock.browserResize();
 			//Center clock in middle of screen
